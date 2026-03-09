@@ -14,7 +14,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ECOM YAN",
+  title: "Juicify",
   description:
     "Minimalist Maldives-focused supplement store with admin dashboard.",
 };

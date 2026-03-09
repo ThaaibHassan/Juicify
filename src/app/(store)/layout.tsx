@@ -34,9 +34,8 @@ export default async function StoreLayout({ children }: { children: ReactNode })
         <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-10 flex items-center gap-4 sm:gap-6 py-4">
           <Link href="/" className="shrink-0 text-lg font-semibold tracking-tight">
             <span className="rounded-md bg-foreground px-2 py-1 text-sm font-semibold text-background">
-              ECOM
-            </span>{" "}
-            <span className="text-muted-foreground">YAN</span>
+              Juicify
+            </span>
           </Link>
           <Link href="/search" className="sm:hidden p-2 text-muted-foreground hover:text-foreground" aria-label="Search">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
@@ -96,7 +95,7 @@ export default async function StoreLayout({ children }: { children: ReactNode })
       </main>
       <footer className="border-t bg-background/80 py-6">
         <div className="mx-auto w-full max-w-6xl px-6 sm:px-8 lg:px-10 text-center text-xs text-muted-foreground">
-          Authentic supplements · Maldives delivery · Powered by ECOM YAN
+          Authentic supplements · Maldives delivery · Powered by Juicify
         </div>
       </footer>
     </div>

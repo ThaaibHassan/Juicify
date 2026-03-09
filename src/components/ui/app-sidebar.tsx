@@ -88,7 +88,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon" variant="inset" className="admin-sidebar">
       <SidebarHeader>
         <span className="text-sm font-semibold tracking-tight">
-          ECOM YAN Admin
+          Juicify Admin
         </span>
         <Link href="/admin/register-sale" className="mt-3 block w-full">
           <Button variant="default" size="sm" className="w-full justify-start gap-2 text-left">
