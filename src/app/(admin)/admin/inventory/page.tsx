@@ -47,16 +47,12 @@ export default async function AdminInventoryPage() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {(variants ?? []).map((v: {
-                id: number;
-                sku: string;
-                size_label: string;
-                stock_qty: number;
-                is_active: boolean;
-                products: { name: string; slug: string } | null;
-              }) => (
+              {(variants ?? []).map((v: any) => {
+                const product =
+                  Array.isArray(v.products) && v.products.length > 0 ? v.products[0] : v.products;
+                return (
                 <TableRow key={v.id}>
-                  <TableCell className="font-medium">{(v.products as { name: string } | null)?.name ?? "—"}</TableCell>
+                  <TableCell className="font-medium">{product?.name ?? "—"}</TableCell>
                   <TableCell className="font-mono text-sm">{v.sku}</TableCell>
                   <TableCell>{v.size_label}</TableCell>
                   <TableCell>
@@ -73,7 +69,7 @@ export default async function AdminInventoryPage() {
                     <InventoryAdjust variantId={v.id} currentQty={v.stock_qty} />
                   </TableCell>
                 </TableRow>
-              ))}
+              )})}
             </TableBody>
           </Table>
           {(variants ?? []).length === 0 && (

@@ -47,8 +47,8 @@ export async function GET(
       product_variants: activeVariants,
       product_images: sortedImages,
     };
-    delete (result as Record<string, unknown>).brands;
-    delete (result as Record<string, unknown>).categories;
+    delete (result as any).brands;
+    delete (result as any).categories;
 
     return NextResponse.json(result);
   } catch (err) {

@@ -32,19 +32,16 @@ export async function fetchDaySummary(
     .order("created_at", { ascending: false });
 
   const successOrders = (orders ?? []).filter((o: { payment_status: string }) => o.payment_status === "success");
-  const revenue = successOrders.reduce((s: number, o: { confirmed_revenue: number | null }) => s + (o.confirmed_revenue ?? o.total ?? 0), 0);
+  const revenue = successOrders.reduce(
+    (s: number, o: { confirmed_revenue: number | null; total: number }) =>
+      s + (o.confirmed_revenue ?? o.total ?? 0),
+    0
+  );
 
   const orderIds = (orders ?? []).map((o: { id: number }) => o.id);
   let profit = 0;
   if (orderIds.length > 0) {
-    const { data: items } = await supabase
-      .from("order_items")
-      .select("line_profit")
-      .in("order_id", orderIds);
     const successIds = new Set(successOrders.map((o: { id: number }) => o.id));
-    profit = (items ?? [])
-      .filter((r: { order_id?: number }) => r.order_id === undefined)
-      .reduce((s: number, r: { line_profit: number }) => s + (r.line_profit ?? 0), 0);
     const { data: allItems } = await supabase.from("order_items").select("order_id, line_profit").in("order_id", orderIds);
     profit = (allItems ?? []).reduce((s: number, r: { order_id: number; line_profit: number }) => {
       if (successIds.has(r.order_id)) return s + (r.line_profit ?? 0);
@@ -294,15 +291,20 @@ export async function fetchProductPricing(supabase: SupabaseClient): Promise<Pro
     .from("product_variants")
     .select("id, sku, size_label, cost_price, selling_price, discount_price, products(name)")
     .order("id", { ascending: false });
-  return (data ?? []).map((r: { id: number; sku: string; size_label: string; cost_price: number; selling_price: number; discount_price: number | null; products: { name: string } | null }) => ({
-    id: r.id,
-    product_name: (r.products as { name: string } | null)?.name ?? "—",
-    sku: r.sku,
-    size_label: r.size_label,
-    cost_price: Number(r.cost_price),
-    selling_price: Number(r.selling_price),
-    discount_price: r.discount_price != null ? Number(r.discount_price) : null,
-  }));
+  return (data ?? []).map((r: any) => {
+    const product =
+      Array.isArray(r.products) && r.products.length > 0 ? r.products[0] : r.products;
+    return {
+      id: r.id as number,
+      product_name: (product as { name: string } | null)?.name ?? "—",
+      sku: r.sku as string,
+      size_label: r.size_label as string,
+      cost_price: Number(r.cost_price ?? 0),
+      selling_price: Number(r.selling_price ?? 0),
+      discount_price:
+        r.discount_price != null ? Number(r.discount_price) : null,
+    };
+  });
 }
 
 export type OrderProductsRow = {
@@ -419,14 +421,18 @@ export async function fetchInventoryOverview(supabase: SupabaseClient): Promise<
     .from("product_variants")
     .select("id, sku, size_label, stock_qty, is_active, products(name)")
     .order("stock_qty", { ascending: true });
-  return (data ?? []).map((r: { id: number; sku: string; size_label: string; stock_qty: number; is_active: boolean; products: { name: string } | null }) => ({
-    id: r.id,
-    product_name: (r.products as { name: string } | null)?.name ?? "—",
-    sku: r.sku,
-    size_label: r.size_label,
-    stock_qty: r.stock_qty,
-    is_active: r.is_active,
-  }));
+  return (data ?? []).map((r: any) => {
+    const product =
+      Array.isArray(r.products) && r.products.length > 0 ? r.products[0] : r.products;
+    return {
+      id: r.id as number,
+      product_name: (product as { name: string } | null)?.name ?? "—",
+      sku: r.sku as string,
+      size_label: r.size_label as string,
+      stock_qty: Number(r.stock_qty ?? 0),
+      is_active: Boolean(r.is_active),
+    };
+  });
 }
 
 const LOW_STOCK_THRESHOLD = 10;

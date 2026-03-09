@@ -78,7 +78,7 @@ export default async function AdminProductsPage({
         brands={(brands ?? []) as { id: number; name: string; slug: string }[]}
         searchQuery={searchQ}
       />
-      <ProductsTableBulk products={(products ?? []) as { id: number; name: string; slug: string; status: string; brands: { name: string } | null; categories: { name: string } | null }[]} />
+      <ProductsTableBulk products={(products ?? []) as any[]} />
     </div>
   );
 }

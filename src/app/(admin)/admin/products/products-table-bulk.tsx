@@ -21,8 +21,8 @@ type ProductRow = {
   name: string;
   slug: string;
   status: string;
-  brands: { name: string } | null;
-  categories: { name: string } | null;
+  brands: any;
+  categories: any;
 };
 
 export function ProductsTableBulk({ products }: { products: ProductRow[] }) {
@@ -119,7 +119,11 @@ export function ProductsTableBulk({ products }: { products: ProductRow[] }) {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {products.map((p) => (
+            {products.map((p: ProductRow) => {
+              const brand = Array.isArray(p.brands) && p.brands.length > 0 ? p.brands[0] : p.brands;
+              const category =
+                Array.isArray(p.categories) && p.categories.length > 0 ? p.categories[0] : p.categories;
+              return (
               <TableRow key={p.id}>
                 <TableCell>
                   <input
@@ -135,15 +139,15 @@ export function ProductsTableBulk({ products }: { products: ProductRow[] }) {
                 <TableCell>
                   <StatusPill status={p.status} />
                 </TableCell>
-                <TableCell>{(p.brands as { name: string } | null)?.name ?? "—"}</TableCell>
-                <TableCell>{(p.categories as { name: string } | null)?.name ?? "—"}</TableCell>
+                <TableCell>{brand?.name ?? "—"}</TableCell>
+                <TableCell>{category?.name ?? "—"}</TableCell>
                 <TableCell>
                   <Button asChild variant="outline" size="sm">
                     <Link href={`/admin/products/${p.id}/edit`}>Edit</Link>
                   </Button>
                 </TableCell>
               </TableRow>
-            ))}
+            )})}
           </TableBody>
         </Table>
         {products.length === 0 && (

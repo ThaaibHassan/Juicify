@@ -125,10 +125,18 @@ export function RevenueChart({
                     border: "1px solid hsl(var(--border))",
                     background: "hsl(var(--card))",
                   }}
-                  formatter={(value: number) => [
-                    isCountMetric ? value.toLocaleString() : `${value.toLocaleString()} MVR`,
-                    tooltipLabel,
-                  ]}
+                  formatter={(value: unknown) => {
+                    const num =
+                      typeof value === "number"
+                        ? value
+                        : Number(value ?? 0) || 0;
+                    return [
+                      isCountMetric
+                        ? num.toLocaleString()
+                        : `${num.toLocaleString()} MVR`,
+                      tooltipLabel,
+                    ];
+                  }}
                   labelFormatter={(label) => label}
                 />
                 <Area

@@ -46,6 +46,12 @@ const statusButtonVariants = {
     shadow: "0 4px 14px rgba(245, 158, 11, 0.3)",
     icon: Clock,
   },
+  payment_confirmed: {
+    bg: "#facc15",
+    text: "#713f12",
+    shadow: "0 4px 14px rgba(250, 204, 21, 0.35)",
+    icon: CheckCircle,
+  },
   ready_for_dispatch: {
     bg: "#93c5fd",
     text: "#1e40af",

@@ -62,16 +62,32 @@ export async function getHomepageProducts(
     if (!products?.length) return [];
 
     const bySlug = new Map(
-      products.map((p) => [
-        p.slug,
-        {
-          slug: p.slug as string,
-          name: p.name as string,
-          category: (p.categories as { name: string } | null)?.name ?? null,
-          variants: (p.product_variants as Array<{ selling_price: number; discount_price?: number | null; is_active?: boolean }>) ?? [],
-          images: (p.product_images as Array<{ image_url: string; is_primary: boolean; sort_order: number }>) ?? [],
-        },
-      ])
+      products.map((p) => {
+        const categoryValue =
+          Array.isArray(p.categories) && p.categories.length > 0
+            ? p.categories[0]
+            : p.categories;
+        return [
+          p.slug,
+          {
+            slug: p.slug as string,
+            name: p.name as string,
+            category: (categoryValue as { name: string } | null)?.name ?? null,
+            variants:
+              (p.product_variants as Array<{
+                selling_price: number;
+                discount_price?: number | null;
+                is_active?: boolean;
+              }>) ?? [],
+            images:
+              (p.product_images as Array<{
+                image_url: string;
+                is_primary: boolean;
+                sort_order: number;
+              }>) ?? [],
+          },
+        ];
+      })
     );
 
     const ordered = slugs
@@ -122,20 +138,34 @@ export async function getHomepageProducts(
   if (!products?.length) return [];
 
   return products.map((p) => {
-    const variants = (p.product_variants as Array<{ selling_price: number; discount_price?: number | null; is_active?: boolean }>) ?? [];
+    const variants =
+      (p.product_variants as Array<{
+        selling_price: number;
+        discount_price?: number | null;
+        is_active?: boolean;
+      }>) ?? [];
     const active = variants.filter((v) => v.is_active !== false);
     const prices = active.map((v) => v.discount_price ?? v.selling_price);
     const minPrice = prices.length ? Math.min(...prices) : 0;
-    const images = (p.product_images as Array<{ image_url: string; is_primary: boolean; sort_order: number }>) ?? [];
+    const images =
+      (p.product_images as Array<{
+        image_url: string;
+        is_primary: boolean;
+        sort_order: number;
+      }>) ?? [];
     const sortedImages = [...images].sort((a, b) => a.sort_order - b.sort_order);
     const primary = sortedImages.find((i) => i.is_primary) ?? sortedImages[0];
+    const categoryValue =
+      Array.isArray(p.categories) && p.categories.length > 0
+        ? p.categories[0]
+        : p.categories;
     return {
       slug: p.slug as string,
       name: p.name as string,
       image: primary?.image_url ?? null,
       price: String(minPrice),
       oldPrice: null,
-      category: (p.categories as { name: string } | null)?.name ?? null,
+      category: (categoryValue as { name: string } | null)?.name ?? null,
     };
   });
 }

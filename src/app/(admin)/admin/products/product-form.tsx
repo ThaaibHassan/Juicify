@@ -111,7 +111,7 @@ export function ProductForm({ product, imageCount = 0 }: ProductFormProps) {
   const updateVariantText = (index: number, field: "size_label" | "sku", value: string) => {
     setVariants((prev) => {
       const next = [...prev];
-      if (next[index]) (next[index] as Record<string, string>)[field] = value;
+      if (next[index]) (next[index] as any)[field] = value;
       return next;
     });
   };
