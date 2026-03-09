@@ -1,0 +1,4 @@
+name,slug,description,category,brand,sku,size_label,selling_price,cost_price,stock_qty
+Whey Protein,whey-protein,High quality whey protein,protein,Optimum Nutrition,WP-1,1kg,899.00,450.00,50
+Creatine Monohydrate,creatine-mono,Pure creatine monohydrate,creatine,,CR-1,300g,599.00,280.00,30
+BCAA Powder,bcaa-powder,Branched chain amino acids,amino-acids,,BCAA-1,400g,449.00,200.00,25
